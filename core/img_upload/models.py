@@ -47,3 +47,30 @@ class Plan(models.Model):
     class Meta:
         verbose_name = _('Plan')
         verbose_name_plural = _('Plany')
+
+
+def create_plans(apps, schema_editor):
+    from users.models import User
+    BASIC = 'basic'
+    PREMIUM = 'premium'
+    ENTERPRISE = 'enterprise'
+    PLAN_NAME = {
+        BASIC: _('basic'),
+        PREMIUM: _('premium'),
+        ENTERPRISE: _('enterprise')
+    }
+    try:
+        User.objects.create_superuser(username='admin', password='admin')
+        first_size = Size.objects.create(width=200, height=200)
+        second_size = Size.objects.create(width=400, height=400)
+
+        bas = Plan.objects.create(name=BASIC, original_size=False, exp_date=False)
+        bas.size.add(first_size)
+
+        prem = Plan.objects.create(name=PREMIUM, original_size=True, exp_date=False)
+        prem.size.add(first_size, second_size)
+
+        ent = Plan.objects.create(name=ENTERPRISE, original_size=True, exp_date=True)
+        ent.size.add(first_size, second_size)
+    except:
+        pass
