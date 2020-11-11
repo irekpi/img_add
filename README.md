@@ -6,7 +6,7 @@ Users are currently created in Admin panel and can have different plans created 
 
 Admin is able to create arbitrary plans with configurable thumbnail sizes, presence of the link to the originally uploaded file, ability to generate expiring links
 
-####3 basic plans:
+### 3 basic plans:
 
     - basic - User can add photo and get url to 200x200 size
     - premum - User can add photo and get urls for 200x200, 400x400 and original size
