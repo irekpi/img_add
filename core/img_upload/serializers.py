@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 
@@ -13,6 +14,16 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['name', 'file', 'creator']
+
+    def __init__(self, *args, **kwargs):
+        super(ImageSerializer, self).__init__(*args, **kwargs)
+        print(kwargs['context']['request'].user.plans.filter(exp_date=True).exists())
+        if kwargs['context']['request'].user.plans.filter(exp_date=True).exists():
+            self.fields['exp_date'] = serializers.IntegerField(
+                validators=[MaxValueValidator(30000), MinValueValidator(30)],
+                label=_('Wygaśnięcie'),
+                required=False,
+            )
 
 
 class UserSerializer(serializers.ModelSerializer):
